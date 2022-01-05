@@ -1,5 +1,6 @@
 const React = require('react');
 const {Component} = React;
+const Try = require('./Try')
 
 function getNumbers() {
 
@@ -19,7 +20,13 @@ class NumberBaseball extends Component {
     onChangeInput = () => {
 
     };
-
+    fruits = [
+        {fruit : '사과', taste:'맛있다'}
+        ,{fruit : '바나나',taste: '맛있다'}
+        ,{fruit : '술', taste: '맛있다'}
+        ,{fruit : '감', taste: '맛있다'}
+        ,{fruit : '배', taste: '맛있다'}
+    ]
     render() {
         return (
             <>
@@ -41,14 +48,9 @@ class NumberBaseball extends Component {
                         )
                     })}
                     {/* 객체방식 */}
-                    {[{fruit : '사과', taste:'맛있다'}
-                        ,{fruit : '바나나',taste: '맛있다'}
-                        ,{fruit : '술', taste: '맛있다'}
-                        ,{fruit : '감', taste: '맛있다'}
-                        ,{fruit : '배', taste: '맛있다'}
-                    ].map((item, index) => {
+                    {this.fruits.map((item, index) => {
                         return (
-                            <li key={item.fruit + index}><b>{item.fruit}</b> - {item.taste}</li>
+                            <Try value={item} index={index}/>
                         )
                     })}
                     {['사과','바나나','술','감','배',].map((item) => {
