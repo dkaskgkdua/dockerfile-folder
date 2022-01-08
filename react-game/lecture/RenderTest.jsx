@@ -1,16 +1,16 @@
 const React = require('react')
 
-class Test extends React.Component {
+class Test extends React.PureComponent {
     state = {
         counter: 0,
     };
 
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        if(this.state.counter !== nextState.counter) {
-            return true;
-        }
-        return false;
-    }
+    // shouldComponentUpdate(nextProps, nextState, nextContext) {
+    //     if(this.state.counter !== nextState.counter) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     onClick = () => {
         this.setState({

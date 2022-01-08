@@ -1,6 +1,9 @@
 const React = require('react');
 const TryHock = require('./TryHock')
 
+const { memo, useState } = React;
+// 자식 컴포넌트가 모두 퓨어컴포넌트나 memo를 사용하면 부모컴포넌트도 적용 가능
+
 function getNumbers() {
     const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const array = [];
@@ -11,11 +14,11 @@ function getNumbers() {
     return array;
 }
 
-const NumberBaseballHock = () => {
-    const [result, setResult] = React.useState('');
-    const [value, setValue] = React.useState('');
-    const [answer, setAnswer] = React.useState(getNumbers());
-    const [tries, setTries] = React.useState([]);
+const NumberBaseballHock = memo(() => {
+    const [result, setResult] = useState('');
+    const [value, setValue] = useState('');
+    const [answer, setAnswer] = useState(getNumbers());
+    const [tries, setTries] = useState([]);
 
     const onSubmitForm = (e) => {
         e.preventDefault();
@@ -75,6 +78,6 @@ const NumberBaseballHock = () => {
             </ul>
         </>
     );
-}
+});
 
 module.exports = NumberBaseballHock;
