@@ -1,5 +1,5 @@
 const React = require('react');
-const {Component} = React;
+const {Component, createRef } = React;
 const Try2 = require('./Try2')
 
 function getNumbers() {
@@ -28,6 +28,8 @@ class NumberBaseball extends Component {
                     tries: [...prevState.tries, {try: this.state.value, result: '홈런!'}],
                 }
             })
+            // this.inputRef.focus();
+            this.inputRef.current.focus();
         } else {
             const answerArray = this.state.value.split('').map((v) => parseInt(v));
             let strike = 0;
@@ -46,6 +48,8 @@ class NumberBaseball extends Component {
                         tries: [],
                     }
                 })
+                this.inputRef.current.focus();
+                // this.inputRef.focus();
             } else {
                 for(let i = 0; i < 4; i += 1){
                     if(answerArray[i] === this.state.answer[i]) {
@@ -60,6 +64,7 @@ class NumberBaseball extends Component {
                         value: '',
                     }
                 })
+                this.inputRef.current.focus();
             }
         }
     };
@@ -69,13 +74,19 @@ class NumberBaseball extends Component {
             value: e.target.value,
         })
     };
+
+    // 심플방식
+    inputRef = createRef();
+    // 기존방식
+    // onInputRef = (c) => {this.inputRef = c;}
+
     render() {
         const { result, value, tries } = this.state;
         return (
             <>
                 <h1>{result}</h1>
                 <form onSubmit={this.onSubmitForm}>
-                    <input maxLength={4} value={value} onChange={this.onChangeInput}/>
+                    <input ref={this.inputRef} maxLength={4} value={value} onChange={this.onChangeInput}/>
                 </form>
                 <div>시도: {tries.length}</div>
                 <ul>
