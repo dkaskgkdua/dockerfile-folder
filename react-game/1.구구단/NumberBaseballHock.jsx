@@ -69,6 +69,15 @@ const NumberBaseballHock = memo(() => {
             </form>
             <div>시도: {tries.length}</div>
             <ul>
+                {/* 즉시 실행함수 for문 예시 */}
+                {/*{(() => {*/}
+                {/*    const array = [];*/}
+                {/*    for (let i = 0; i < tries.length; i++) {*/}
+                {/*        array.push(<TryHock key={`${i + 1}차 시도 : `} tryInfo={tries[i]} index={i}/>)*/}
+                {/*    }*/}
+                {/*    return array;*/}
+                {/*})()}*/}
+
                 {/* 객체방식 */}
                 {tries.map((item, index) => {
                     return (
