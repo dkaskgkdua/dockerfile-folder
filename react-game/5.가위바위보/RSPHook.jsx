@@ -24,7 +24,11 @@ const RSP = () => {
     const [imgCoord, setImgCoord] = useState(rspCoords.바위)
     const [score, setScore] = useState(0);
     const interval = useRef();
-
+    /**
+     * useEffect에 아래처럼 여러개 사용가능
+     * useEffect(() => { setResult(); setImgCoord()},[result, imgCoord]);
+     * useEffect(() => { setScore(); },[score]);
+     * */
     useEffect(() => { // componentDidMount, componentDidUpdate 역할(1대1은 아님)
         interval.current = setInterval(changeHand, 1000);
         return () => { // componentWillUnmount 역할할
