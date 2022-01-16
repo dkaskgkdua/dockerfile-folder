@@ -1,5 +1,5 @@
 const React = require('react');
-const { useState, useRef, useEffect } = React;
+const { useState, useRef, useEffect, useMemo, useCallback } = React;
 const Ball = require('./Ball')
 
 function getWinNumbers() {
@@ -15,11 +15,26 @@ function getWinNumbers() {
 }
 
 const Lotto = () => {
-    const [winNumbers, setWinNumbers] = useState(getWinNumbers);
+    // 성능최적화를 위해 getWinNumbers에 useMemo를 사용해 매번 랜더링시 호출 안함
+    // useMemo : 복잡한 함수 결괏값을 기억, useRef : 일반 값을 기억
+    const lottoNumbers = useMemo(() => getWinNumbers(), []);
+    const [winNumbers, setWinNumbers] = useState(lottoNumbers);
     const [winBalls, setWinBalls] = useState([]);
     const [bonus, setBonus] = useState(null);
     const [redo, setRedo] = useState(false);
     const timeouts = useRef([]);
+
+    // componentDidUpdate에서만, componentDidMount X
+    const mounted = useRef(false);
+    useEffect(() => {
+        if(!mounted.current) {
+            mounted.current = true;
+        } else {
+            // ajax
+        }
+    }, [
+        // 바뀌는 값
+    ])
 
     useEffect(() => {
         console.log('useEffect1');
@@ -42,13 +57,16 @@ const Lotto = () => {
 
 
 
-    const onClickRedo = () => {
+    // useCallback : useMemo 처럼 함수를 기억해놓음 이후 렌더링 시 새로 생성 안함
+    // useCallback 경우 이전값을 기억하는데 2번째 인자값으로 배열 안에 state값을 넣으면 감지함
+    const onClickRedo = useCallback(() => {
+        console.log(winNumbers)
         setWinNumbers(getWinNumbers);
         setWinBalls([]);
         setBonus(null);
         setRedo(false);
         timeouts.current = [];
-    }
+    }, [winNumbers]);
 
     return (
         <>
@@ -61,37 +79,6 @@ const Lotto = () => {
             {redo && <button onClick={onClickRedo}>한 번 더!</button>}
         </>
     )
-}
-
-class Lotto extends Component {
-    state = {
-        winNumbers: getWinNumbers(), // 당첨 숫자들
-        winBalls: [],
-        bonus: null, // 보너스 공
-        redo: false,
-    };
-    timeouts = [];
-
-    runTimeouts = () => {
-
-    };
-
-    componentDidMount() {
-        this.runTimeouts();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if(!this.state.winBalls.length) {
-            this.runTimeouts();
-        }
-    }
-
-    // setTimeout은 항상 종료를 해줘야한다.
-    componentWillUnmount() {
-        this.timeouts.forEach((v) => {
-            clearTimeout(v);
-        })
-    }
 }
 
 module.exports = Lotto;
