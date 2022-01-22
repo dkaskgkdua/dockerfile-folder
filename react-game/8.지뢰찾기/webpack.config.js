@@ -1,53 +1,44 @@
 const path = require('path');
-const RefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-const webpack = require('webpack');
-
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = {
-    name: 'lcp-setting',
-    mode: 'development', // or production
-    devtool: 'eval',
+    name: 'minesearch-dev',
+    mode: 'development',
+    devtool: 'inline-source-map',
     resolve: {
-      extensions: ['.js', '.jsx']
+        extensions: ['.js', '.jsx'],
     },
     entry: {
-        app: ['./client'],
-    }, // 입력
+        app: './client',
+    },
     module: {
         rules: [{
-            test: /\.jsx?/,
+            test: /\.jsx?$/,
             loader: 'babel-loader',
             options: {
                 presets: [
-                    ['@babel/preset-env',{
-                        targets: {
-                          browsers: ['> 1% in KR'] // browserslist
-                        },
+                    ['@babel/preset-env', {
+                        targets: {browsers: ['last 2 chrome versions']},
                         debug: true,
                     }],
                     '@babel/preset-react',
                 ],
-                plugins: [
-                    '@babel/plugin-proposal-class-properties',
-                    'react-refresh/babel'
-                ]
+                plugins: ["react-refresh/babel"]
             },
             exclude: path.join(__dirname, 'node_modules'),
-        }]
+        }],
     },
     plugins: [
-      new webpack.LoaderOptionsPlugin({debug: true}),
-      new RefreshWebpackPlugin()
-
+        new ReactRefreshWebpackPlugin(),
     ],
     output: {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
         publicPath: '/dist',
-    }, // 출력
+    },
     devServer: {
         devMiddleware: { publicPath: '/dist' },
         static: { directory: path.resolve(__dirname) },
         hot: true
     }
-}
+};

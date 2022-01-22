@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useContext, memo } from 'react';
 import Tr from './Tr';
+import { TableContext } from './MineSearch2';
 
-const Table = ({ onClick, tableData, dispatch }) => {
+const Table = memo(() => {
+    const { tableData } = useContext(TableContext);
     return (
-        <table onClick={onClick}>
-            <tbody>
-                {Array(tableData.length).fill().map((tr, i) => (<Tr key = {i} dispatch={dispatch} rowIndex={i} rowData={tableData[i]}/>))}
-            </tbody>
+        <table>
+            {Array(tableData.length).fill().map((tr, i) => <Tr rowIndex={i} />)}
         </table>
     )
-};
+});
 
 export default Table;
