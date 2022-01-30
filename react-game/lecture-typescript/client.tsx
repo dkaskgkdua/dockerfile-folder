@@ -2,5 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 // import GuGuDan from "./GuGuDan";
-import NumberBaseballClass from "./NumberBaseballClass";
-ReactDOM.render(<NumberBaseballClass/>, document.querySelector("#root"));
+// import ResponseCheck from "./ResponseCheck";
+import HOT from "./RSP";
+ReactDOM.render(<HOT/>, document.querySelector("#root"));
