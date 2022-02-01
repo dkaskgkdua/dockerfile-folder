@@ -1,2 +1,3 @@
 react-game/*/node_modules
-*/dist/
+dist
+/react-game/lecture-typescript/dist/app.js
