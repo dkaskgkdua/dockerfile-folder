@@ -21,6 +21,12 @@ const routes = [
     name: 'Contact',
     // prefetch 적용 -> 첫 로딩 시 캐시에 올라오게 됨.
     component: () => import(/* webpackChunkName: "contact", webpackPrefetch:true */ '../views/Contact.vue')
+  },
+  {
+    path: '/serverdata',
+    name: 'serverData',
+    // prefetch 적용 -> 첫 로딩 시 캐시에 올라오게 됨.
+    component: () => import(/* webpackChunkName: "server", webpackPrefetch:true */ '../views/ServerData.vue')
   }
 ]
 
