@@ -27,6 +27,16 @@ const routes = [
     name: 'serverData',
     // prefetch 적용 -> 첫 로딩 시 캐시에 올라오게 됨.
     component: () => import(/* webpackChunkName: "server", webpackPrefetch:true */ '../views/ServerData.vue')
+  },
+  {
+    path: '/example',
+    name: 'example',
+    component: () => import(/* webpackChunkName: "example", webpackPrefetch:true */ '../views/Example.vue')
+  },
+  {
+    path: '/provider',
+    name: 'provider',
+    component: () => import(/* webpackChunkName: "example", webpackPrefetch:true */ '../views/ProvideInject.vue')
   }
 ]
 
