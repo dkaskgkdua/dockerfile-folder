@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import globalMixins from "../globalMixins";
+import globalMixins from '../globalMixins'
 
 createApp(App)
   .use(store)

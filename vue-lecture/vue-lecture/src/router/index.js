@@ -37,6 +37,31 @@ const routes = [
     path: '/provider',
     name: 'provider',
     component: () => import(/* webpackChunkName: "example", webpackPrefetch:true */ '../views/ProvideInject.vue')
+  },
+  {
+    path: '/calculator',
+    name: 'Calculator',
+    component: () => import(/* webpackChunkName: "calculator" */ '../views/Calculator.vue')
+  },
+  {
+    path: '/compositionapi1',
+    name: 'Compositionapi1',
+    component: () => import(/* webpackChunkName: "composition" */ '../views/CompositionAPI.vue')
+  },
+  {
+    path: '/compositionapi2',
+    name: 'Compositionapi2',
+    component: () => import(/* webpackChunkName: "composition" */ '../views/CompositionAPI2.vue')
+  },
+  {
+    path: '/compositionapi3',
+    name: 'Compositionapi3',
+    component: () => import(/* webpackChunkName: "composition" */ '../views/CompositionAPI3.vue')
+  },
+  {
+    path: '/compositionapi4',
+    name: 'Compositionapi4',
+    component: () => import(/* webpackChunkName: "composition" */ '../views/CompositionAPI4.vue')
   }
 ]
 

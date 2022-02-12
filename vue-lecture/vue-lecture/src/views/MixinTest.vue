@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import ApiMixin from '../api.js';
+import ApiMixin from '../api.js'
 
 export default {
   name: 'MixinTest',
@@ -37,7 +37,7 @@ export default {
     async getProductList () {
       const response = await this.$callAPI('https://b0875cf4-46c3-43b7-a8dd-1be9afc4db65.mock.pstmn.io/list', 'get', {})
       this.productList = response.data
-    },
+    }
   }
 }
 </script>
