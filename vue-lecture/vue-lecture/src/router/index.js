@@ -62,6 +62,26 @@ const routes = [
     path: '/compositionapi4',
     name: 'Compositionapi4',
     component: () => import(/* webpackChunkName: "composition" */ '../views/CompositionAPI4.vue')
+  },
+  {
+    path: '/compositionapiprovide',
+    name: 'Composition-Api-Provide',
+    component: () => import(/* webpackChunkName: "composition" */ '../views/CompositionAPIProvide.vue')
+  },
+  {
+    path: '/customdirective',
+    name: 'CustomDirective',
+    component: () => import(/* webpackChunkName: "directive" */ '../views/CustomDirective.vue')
+  },
+  {
+    path: '/plugins',
+    name: 'Plugins',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Plugins.vue')
+  },
+  {
+    path: '/storeacceess',
+    name: 'StoreAccess',
+    component: () => import(/* webpackChunkName: "about" */ '../views/StoreAccess.vue')
   }
 ]
 
