@@ -41,39 +41,5 @@ const enhancer = compose(
 );
 
 const store = createStore(reducer, initialState, enhancer);
-store.subscribe(() => { // react-redux안에 들어있음.. 그래서 잘 안씀
-    console.log('change'); // 화면 바꿔주는 코드 여기서
-})
-console.log('1st ',store.getState());
-//
-// store.dispatch({
-//     type: "LOG_IN_REQUEST",
-// });
 
-// dispatch
-store.dispatch(logIn({
-    id: 1,
-    name: 'minjune',
-    admin: true,
-}));
-
-console.log('2nd ',store.getState());
-
-
-store.dispatch(addPost({
-    id: 1,
-    userId: 1,
-    content: "안녕하세요. 리덕스",
-}));
-
-console.log('3rd ',store.getState());
-
-store.dispatch(addPost({
-    id: 2,
-    userId: 1,
-    content: "두번째. 리덕스",
-}));
-
-console.log('4th ',store.getState());
-store.dispatch(logOut());
-console.log('5th ',store.getState());
+module.exports = store;
