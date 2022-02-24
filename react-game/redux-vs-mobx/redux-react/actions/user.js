@@ -20,6 +20,7 @@ const logIn = (data) => { // async action creator
         }
     };
 }
+export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
 
 const logInFailure = (error) => {
     return {
@@ -28,15 +29,17 @@ const logInFailure = (error) => {
     }
 }
 
+export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
 const logInRequest = (data) => {
     return {
-        type: 'LOG_IN_REQUEST',
+        type: LOG_IN_REQUEST,
         data
     }
 }
+export const LOG_IN_SUCCESS = "LOG_IN_SUCCESS";
 const logInSuccess = (data) => {
     return {
-        type: 'LOG_IN_SUCCESS',
+        type: LOG_IN_SUCCESS,
         data,
     }
 }
