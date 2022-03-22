@@ -10,9 +10,10 @@ const FormWrapper = styled(Form)`
     padding: 10px;
 `;
 
-const LoginForm = ({setIsLoggedIn}) => {
+const LoginForm = ({ setIsLoggedIn }) => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
+
     const onChangeId = useCallback((e) => {
         setId(e.target.value);
     }, []);
