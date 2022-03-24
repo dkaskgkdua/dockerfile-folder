@@ -1,6 +1,7 @@
 import "antd/dist/antd.css";
 import PropTypes from "prop-types";
 import Head from "next/head";
+import wrapper from "../store/configureStore";
 
 // 전체 페이지에 공통적인 적용함
 const NodeBird = ({ Component }) => {
@@ -12,11 +13,10 @@ const NodeBird = ({ Component }) => {
             </Head>
             <Component />
         </>
-)
-
-}
+    );
+};
 
 NodeBird.propTypes = {
     Component: PropTypes.elementType.isRequired,
 }
-export default NodeBird;
+export default wrapper.withRedux(NodeBird);
