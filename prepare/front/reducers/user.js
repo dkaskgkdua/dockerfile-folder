@@ -114,7 +114,9 @@ const reducer = (state = initialState, action) => {
                 signUpError: action.error,
             };
         default:
-            return state;
+            return {
+                ...state
+            };
     }
 }
 export default reducer;
