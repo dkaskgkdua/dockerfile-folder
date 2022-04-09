@@ -15,7 +15,7 @@ const CommentForm = ({ post }) => {
         <Form onFinish={onSubmitComment}>
             <Form.Item>
                 <Input.TextArea value={commentText} onChange={onChangeCommentText} rows={4}/>
-                <Button type="primary" htmlType="submit">삐약</Button>
+                <Button style={{ position: "absolute", right: 0, bottom: -40}} type="primary" htmlType="submit">삐약</Button>
             </Form.Item>
         </Form>
     );
