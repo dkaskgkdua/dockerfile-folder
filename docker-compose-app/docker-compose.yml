@@ -1,0 +1,15 @@
+# docker compose 옵션 yml
+version: "3"
+services:
+  redis-server:
+    image: "redis"
+  node-app:
+#    build 기준 경로 현재 경로를 기준 .
+    build: .
+    ports:
+      - "5000:8090"
+
+# docker compose up( 이미지가 없을 때 이미지 빌드 후 컨테이너 실행)
+# docker compose up --build ( 이미지가 있든 없든 이미지를 빌드하고 컨테이너 실행)
+# docker-compose up -d (detached 모드로서 앱을 백그라운드에서 실행, output 표출 안함)
+# docker compose down 컨테이너들을 한꺼번에 종료
