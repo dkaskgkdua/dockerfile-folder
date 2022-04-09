@@ -1,13 +1,34 @@
-import { all, fork, take, call, put } from "redux-saga/effects";
+import { all, fork, take, call, put, takeEvery, takeLatest, throttle } from "redux-saga/effects";
 import axios from "axios";
 
-function logInAPI(data, a) {
+function logInAPI(data) {
     return axios.post("/api/login", data)
+}
+function logOutAPI(data) {
+    return axios.post("/api/logout", data)
+}
+function addPostAPI(data) {
+    return axios.post("/api/post", data);
+}
+
+function* addPost(action) {
+    try {
+        const result = yield call(addPostAPI, action.data);
+        yield put({
+            type: "ADD_POST_SUCCESS",
+            data: result.data
+        });
+    } catch(err) {
+        yield put({
+            type: "ADD_POST_FAILURE",
+            data: err.response.data
+        })
+    }
 }
 
 function* logIn(action) {
     try {
-        const result = yield call(logInAPI, action.data, 'a');
+        const result = yield call(logInAPI, action.data);
         yield put({
             type: "LOG_IN_SUCCESS",
             data: result.data
@@ -19,15 +40,37 @@ function* logIn(action) {
         })
     }
 }
+function* logOut() {
+    try {
+        const result = yield call(logOutAPI);
+        yield put({
+            type: "LOG_OUT_SUCCESS",
+            data: result.data
+        })
+    } catch(err) {
+        yield put({
+            type: "LOG_OUT_FAILURE",
+            data: err.response.data,
+        })
+    }
+}
 
+/**
+ * 기본적으로 이벤트 리스너에서 사용하는 take는 일회성이다.
+ *  그래서 while(true) 로 감싸서 무한으로 사용가능하게 하거나
+ *  takeEvery를 사용해준다
+ *
+ *  takeLatest 는 마우스 여러번 클릭과같은 이벤트 중복을 방지해준다(마지막 이벤트만 실행)
+ */
 function* watchLogin() {
-    yield take("LOG_IN_REQUEST", logIn);
+    yield takeLatest("LOG_IN_REQUEST", logIn);
 }
 function* watchLogOut() {
-    yield take("LOG_OUT_REQUEST");
+    yield takeEvery("LOG_OUT_REQUEST", logOut);
 }
+// 요청보내는 것을 2초내에한번만 가능하게
 function* watchAddPost() {
-    yield take("ADD_POST_REQUEST");
+    yield throttle("ADD_POST_REQUEST", addPost, 2000);
 }
 
 /**
