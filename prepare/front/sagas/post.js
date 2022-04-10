@@ -17,7 +17,8 @@ export default function* postSaga() {
 }
 // 요청보내는 것을 2초내에한번만 가능하게
 function* watchAddPost() {
-    yield throttle(ADD_POST_REQUEST, addPost, 2000);
+    // yield throttle(ADD_POST_REQUEST, addPost, 2000);
+    yield takeLatest(ADD_POST_REQUEST, addPost);
 }
 function* watchAddComment() {
     yield takeLatest(ADD_COMMENT_REQUEST, addComment);
@@ -31,12 +32,14 @@ function addCommentAPI(data) {
 }
 
 function* addPost(action) {
+    console.log("사가" + action);
     try {
         // const result = yield call(addPostAPI, action.data);
         yield delay(1000);
         yield put({
             type: ADD_POST_SUCCESS,
-            data: result.data
+            // data: result.data,
+            data: action.data,
         });
     } catch(err) {
         yield put({
@@ -51,7 +54,8 @@ function* addComment(action) {
         yield delay(1000);
         yield put({
             type: ADD_COMMENT_SUCCESS,
-            data: result.data
+            // data: result.data,
+            data: action.data,
         });
     } catch(err) {
         yield put({

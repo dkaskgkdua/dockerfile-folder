@@ -1,3 +1,5 @@
+import shortId from "shortid";
+
 export const initialState = {
     mainPosts: [{
         id: 1,
@@ -42,25 +44,34 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
-export const addPost = () => ({
+export const addPost = (data) => ({
     type: ADD_POST_REQUEST,
     data,
 });
-export const addComment = () => ({
+export const addComment = (data) => ({
     type: ADD_COMMENT_REQUEST,
     data,
 });
 
-const dummyPost = {
-    id: 2,
-    content: '더미데이터입니다.',
+const dummyPost = (data) => ({
+    id: shortId.generate(),
+    content: data,
     User: {
         id: 1,
         nickname: '제로초'
     },
     Images: [],
     Comments: [],
-}
+});
+
+const dummyComment = (data) => ({
+    id: shortId.generate(),
+    content: data,
+    User: {
+        id: 1,
+        nickname: '제로초'
+    },
+})
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
@@ -74,14 +85,13 @@ const reducer = (state = initialState, action) => {
         case ADD_POST_SUCCESS:
             return {
                 ...state,
-                mainPosts: [dummyPost, ...state.mainPosts],
+                mainPosts: [dummyPost(action.data), ...state.mainPosts],
                 addPostLoading: false,
                 addPostDone: true
             };
         case ADD_POST_FAILURE:
             return {
                 ...state,
-                mainPosts: [dummyPost, ...state.mainPosts],
                 addPostLoading: false,
                 addPostError: action.error,
             };
@@ -92,17 +102,26 @@ const reducer = (state = initialState, action) => {
                 addCommentDone: false,
                 addCommentError: null,
             };
-        case ADD_COMMENT_SUCCESS:
+        case ADD_COMMENT_SUCCESS: {
+            console.log(action)
+            // 불변성을 위한 작업(바뀐것만 바꿔주고 안바뀐건 참조유지)
+            const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId);
+            const post = {...state.mainPosts[postIndex]};
+            console.log(post)
+            post.Comments = [dummyComment(action.data.content), ...post.Comments];
+            const mainPosts = [...state.mainPosts];
+            mainPosts[postIndex] = post;
+            console.log(mainPosts)
             return {
                 ...state,
-                mainPosts: [dummyPost, ...state.mainPosts],
+                mainPosts,
                 addCommentLoading: false,
                 addCommentDone: true
             };
+        }
         case ADD_COMMENT_FAILURE:
             return {
                 ...state,
-                mainPosts: [dummyPost, ...state.mainPosts],
                 addCommentLoading: false,
                 addCommentError: action.error,
             };

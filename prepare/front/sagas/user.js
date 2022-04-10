@@ -47,10 +47,12 @@ function* signUp(action) {
 }
 function* logIn(action) {
     try {
-        const result = yield call(logInAPI, action.data);
+        // const result = yield call(logInAPI, action.data);
+        yield delay(1000);
         yield put({
             type: LOG_IN_SUCCESS,
-            data: result.data
+            // data: result.data,
+            data: action.data,
         })
     } catch(err) {
         yield put({
@@ -61,7 +63,8 @@ function* logIn(action) {
 }
 function* logOut() {
     try {
-        const result = yield call(logOutAPI);
+        // const result = yield call(logOutAPI);
+        yield delay(1000);
         yield put({
             type: LOG_OUT_SUCCESS,
             data: result.data
