@@ -10,6 +10,12 @@ export const initialState = {
     signUpLoading: false, // 가입입 도중
     signUpDone: false,
     signUpError: null,
+    followLoading: false,
+    followDone: false,
+    followError: null,
+    unfollowLoading: false,
+    unfollowDone: false,
+    unfollowError: null,
     changeNicknameLoading: false, // 닉네임 변경 도중
     changeNicknameDone: false,
     changeNicknameError: null,
@@ -39,6 +45,10 @@ export const UNFOLLOW_REQUEST = "UNFOLLOW_REQUEST";
 export const UNFOLLOW_SUCCESS = "UNFOLLOW_SUCCESS";
 export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
 
+export const FOLLOW_REQUEST = "FOLLOW_REQUEST";
+export const FOLLOW_SUCCESS = "FOLLOW_SUCCESS";
+export const FOLLOW_FAILURE = "FOLLOW_FAILURE";
+
 export const ADD_POST_TO_ME = "ADD_POST_TO_ME";
 export const REMOVE_POST_OF_ME = "REMOVE_POST_OF_ME";
 
@@ -67,6 +77,34 @@ export const logoutRequestAction = () => {
 const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch(action.type) {
+            case UNFOLLOW_REQUEST:
+                draft.unfollowInLoading = true;
+                draft.unfollowInError = null;
+                draft.unfollowInDone = false;
+                break;
+            case UNFOLLOW_SUCCESS:
+                draft.unfollowLoading = false;
+                draft.unfollowDone = true;
+                draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data );
+                break;
+            case UNFOLLOW_FAILURE:
+                draft.unfollowLoading = false;
+                draft.unfollowError = action.error;
+                break;
+            case FOLLOW_REQUEST:
+                draft.followInLoading = true;
+                draft.followInError = null;
+                draft.followInDone = false;
+                break;
+            case FOLLOW_SUCCESS:
+                draft.followLoading = false;
+                draft.followDone = true;
+                draft.me.Followings.push({ id: action.data });
+                break;
+            case FOLLOW_FAILURE:
+                draft.followLoading = false;
+                draft.followError = action.error;
+                break;
             case LOG_IN_REQUEST:
                 draft.logInLoading = true;
                 draft.logInError = null;
