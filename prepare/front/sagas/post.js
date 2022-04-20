@@ -26,7 +26,7 @@ export default function* postSaga() {
 }
 // 요청보내는 것을 2초내에한번만 가능하게
 function* watchLoadPosts() {
-    yield takeLatest(LOAD_POSTS_REQUEST, loadPosts);
+    yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
 }
 function* watchAddPost() {
     // yield throttle(ADD_POST_REQUEST, addPost, 2000);

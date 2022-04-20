@@ -72,9 +72,9 @@ export const generateDummyPost = (number) => Array(number).fill().map(() => ({
     }],
 }));
 
-initialState.mainPosts = initialState.mainPosts.concat(
-    generateDummyPost(10)
-);
+// initialState.mainPosts = initialState.mainPosts.concat(
+//     generateDummyPost(10)
+// );
 
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
 export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
