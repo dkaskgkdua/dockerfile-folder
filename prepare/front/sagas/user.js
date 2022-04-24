@@ -16,13 +16,13 @@ import {
 } from "../reducers/user";
 
 function logInAPI(data) {
-    return axios.post("/api/login", data)
+    return axios.post("/user/login", data)
 }
 function logOutAPI(data) {
     return axios.post("/api/logout", data)
 }
 function signUpAPI(data) {
-    return axios.post("http://localhost:3065/user", data)
+    return axios.post("/user", data)
 }
 function followAPI(data) {
     return axios.post("/api/signUp", data)
@@ -87,6 +87,7 @@ function* signUp(action) {
             data: result.data
         })
     } catch(err) {
+        console.log("faile", err.response)
         yield put({
             type: SIGN_UP_FAILURE,
             data: err.response.data,
@@ -95,12 +96,12 @@ function* signUp(action) {
 }
 function* logIn(action) {
     try {
-        // const result = yield call(logInAPI, action.data);
-        yield delay(1000);
+        const result = yield call(logInAPI, action.data);
+        // yield delay(1000);
         yield put({
             type: LOG_IN_SUCCESS,
             // data: result.data,
-            data: action.data,
+            data: result.data,
         })
     } catch(err) {
         yield put({
