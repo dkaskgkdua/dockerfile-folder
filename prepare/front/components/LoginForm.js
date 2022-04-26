@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useMemo} from "react";
+import React, {useCallback, useState, useMemo, useEffect} from "react";
 import {Button, Form, Input} from "antd";
 import Link from "next/link";
 import styled from "styled-components"
@@ -18,7 +18,13 @@ const LoginForm = () => {
     const dispatch = useDispatch();
     const [email, onChangeEmail] = useInput("");
     const [password, onChangePassword] = useInput("");
-    const { logInLoading } = useSelector((state) => state.user);
+    const { logInLoading, logInError } = useSelector((state) => state.user);
+
+    useEffect(() => {
+        if(logInError) {
+            alert(logInError);
+        }
+    }, [logInError]);
 
     // 렌더링 최적화 (스타일드 컴포넌트 적용 안할 시에)
     const style = useMemo(() => ({ marginTop: 10}), []);
