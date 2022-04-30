@@ -41,7 +41,7 @@ function* watchAddComment() {
 }
 
 function loadPostsAPI(data) {
-    return axios.get("/api/posts", data);
+    return axios.get("/posts", data);
 }
 function addPostAPI(data) {
     return axios.post("/post", { content : data});

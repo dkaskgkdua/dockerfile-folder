@@ -20,8 +20,8 @@ passportConfig();
 
 app.use(cors({
     // origin: "https://nodebird.com",
-    origin: "*",
-    credentials: false,
+    origin: "http://localhost:3060",
+    credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
