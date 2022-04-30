@@ -19,7 +19,7 @@ function logInAPI(data) {
     return axios.post("/user/login", data)
 }
 function logOutAPI(data) {
-    return axios.post("/api/logout", data)
+    return axios.post("/user/logout", data)
 }
 function signUpAPI(data) {
     return axios.post("/user", data)
