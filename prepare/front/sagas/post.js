@@ -55,14 +55,11 @@ function addCommentAPI(data) {
 
 function* loadPosts(action) {
     try {
-        // const result = yield call(addPostAPI, action.data);
-        yield delay(1000);
-        const id = shortId.generate();
-        console.log(action);
+        const result = yield call(loadPostsAPI, action.data);
         yield put({
             type: LOAD_POSTS_SUCCESS,
             // data: result.data,
-            data: generateDummyPost(10)
+            data: result.data,
         });
     } catch(err) {
         yield put({
@@ -118,10 +115,11 @@ function* addComment(action) {
         // yield delay(1000);
         yield put({
             type: ADD_COMMENT_SUCCESS,
-            // data: result.data,
-            data: action.data,
+            data: result.data,
+            // data: action.data,
         });
     } catch(err) {
+        console.error(err);
         yield put({
             type: ADD_COMMENT_FAILURE,
             data: err.response.data
