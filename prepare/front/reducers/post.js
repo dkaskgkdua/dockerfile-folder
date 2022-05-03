@@ -25,6 +25,9 @@ export const initialState = {
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
+    changeNicknameLoading: false,
+    changeNicknameDone: false,
+    changeNicknameError: null,
 }
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
@@ -53,6 +56,8 @@ export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 
 
+
+
 export const addPost = (data) => ({
     type: ADD_POST_REQUEST,
     data,
@@ -65,6 +70,7 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch(action.type) {
+
             case UNLIKE_POST_REQUEST:
                 draft.unlikePostLoading = true;
                 draft.unlikePostDone = false;
@@ -133,7 +139,7 @@ const reducer = (state = initialState, action) => {
                 draft.removePostError = null;
                 break;
             case REMOVE_POST_SUCCESS:
-                draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+                draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data.PostId);
                 draft.removePostLoading = false;
                 draft.removePostDone = true;
                 break;
