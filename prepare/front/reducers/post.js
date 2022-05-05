@@ -28,6 +28,9 @@ export const initialState = {
     changeNicknameLoading: false,
     changeNicknameDone: false,
     changeNicknameError: null,
+    uploadImagesLoading: false,
+    uploadImagesDone: false,
+    uploadImagesError: null,
 }
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
@@ -54,6 +57,10 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
+export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
+export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
+export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
+
 
 
 
@@ -71,6 +78,21 @@ const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch(action.type) {
 
+            case UPLOAD_IMAGES_REQUEST:
+                draft.loadImagesLoading = true;
+                draft.loadImagesDone = false;
+                draft.loadImagesError = null;
+                break;
+            case UPLOAD_IMAGES_SUCCESS: {
+                draft.imagePaths = action.data;
+                draft.loadImagesLoading = false;
+                draft.loadImagesDone = true;
+                break;
+            }
+            case UPLOAD_IMAGES_FAILURE:
+                draft.loadImagesLoading = false;
+                draft.loadImagesError = action.error;
+                break;
             case UNLIKE_POST_REQUEST:
                 draft.unlikePostLoading = true;
                 draft.unlikePostDone = false;
