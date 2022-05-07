@@ -14,6 +14,24 @@ const PostCard = ({post}) => {
     const id = useSelector((state) => state.user.me?.id);
     const { removePostLoading, retweetError } = useSelector((state) => state.post);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+
+    const onClickUpdate = useCallback(() => {
+        setEditMode(true);
+    }, []);
+
+    const onCancelUpdate = useCallback(() => {
+        setEditMode(false);
+    }, []);
+    const onChangePost = useCallback((editText) => () => {
+        dispatch({
+            type: UPDATE_POST_REQUEST,
+            data: {
+                PostId: post.id,
+                content: editText,
+            },
+        });
+    }, [post]);
 
     const onLike = useCallback(() => {
         if(!id) {
@@ -96,7 +114,7 @@ const PostCard = ({post}) => {
                                 <Card.Meta
                                     avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
                                     title={post.Retweet.User.nickname}
-                                    description={<PostCardContent postData={post.Retweet.content}/>}
+                                    description={<PostCardContent postData={post.Retweet.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
                                 />
                         </Card>
                     )
@@ -104,7 +122,7 @@ const PostCard = ({post}) => {
                         <Card.Meta
                             avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
                             title={post.User.nickname}
-                            description={<PostCardContent postData={post.content}/>}
+                            description={<PostCardContent editMode={editMode} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} postData={post.content} />}
                         />
                     )
                 }

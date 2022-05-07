@@ -18,7 +18,7 @@ import {
     REMOVE_POST_SUCCESS, RETWEET_FAILURE, RETWEET_REQUEST, RETWEET_SUCCESS,
     UNLIKE_POST_FAILURE,
     UNLIKE_POST_REQUEST,
-    UNLIKE_POST_SUCCESS, UPLOAD_IMAGES_FAILURE,
+    UNLIKE_POST_SUCCESS, UPDATE_POST_FAILURE, UPDATE_POST_REQUEST, UPDATE_POST_SUCCESS, UPLOAD_IMAGES_FAILURE,
     UPLOAD_IMAGES_REQUEST,
     UPLOAD_IMAGES_SUCCESS
 } from "../reducers/post";
@@ -35,6 +35,7 @@ export default function* postSaga() {
         fork(watchLoadPosts),
         fork(watchUploadImages),
         fork(watchRetweet),
+        fork(watchUpdatePost),
     ])
 }
 // 요청보내는 것을 2초내에한번만 가능하게
@@ -43,6 +44,9 @@ function* watchLoadPosts() {
 }
 function* watchRetweet() {
     yield takeLatest(RETWEET_REQUEST, retweet);
+}
+function* watchUpdatePost() {
+    yield takeLatest(UPDATE_POST_REQUEST, updatePost);
 }
 function* watchAddPost() {
     yield takeLatest(ADD_POST_REQUEST, addPost);
@@ -74,8 +78,8 @@ function uploadImagesAPI(data) {
 function unlikePostAPI(data) {
     return axios.delete(`/post/${data}/like`);
 }
-function loadPostsAPI(data) {
-    return axios.get("/posts", data);
+function loadPostsAPI(lastId) {
+    return axios.get(`/posts?lastId=${lastId || 0}&limit=10&offset=10`);
 }
 function addPostAPI(data) {
     return axios.post("/post", data);
@@ -88,6 +92,9 @@ function addCommentAPI(data) {
 }
 function retweetAPI(data) {
     return axios.post(`/post/${data}/retweet`);
+}
+function updatePostAPI(data) {
+    return axios.patch(`/post/${data.PostId}`, data);
 }
 
 function* retweet(action) {
@@ -104,6 +111,22 @@ function* retweet(action) {
         })
     }
 }
+function* updatePost(action) {
+    try {
+        const result = yield call(updatePostAPI, action.data);
+        yield put({
+            type: UPDATE_POST_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: UPDATE_POST_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
 function* uploadImages(action) {
     try {
         const result = yield call(uploadImagesAPI, action.data);
@@ -120,10 +143,9 @@ function* uploadImages(action) {
 }
 function* loadPosts(action) {
     try {
-        const result = yield call(loadPostsAPI, action.data);
+        const result = yield call(loadPostsAPI, action.lastId);
         yield put({
             type: LOAD_POSTS_SUCCESS,
-            // data: result.data,
             data: result.data,
         });
     } catch(err) {

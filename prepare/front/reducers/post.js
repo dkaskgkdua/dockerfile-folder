@@ -34,6 +34,9 @@ export const initialState = {
     retweetLoading: false,
     retweetDone: false,
     retweetError: null,
+    updatePostLoading: false,
+    updatePostDone: false,
+    updatePostError: null,
 }
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
@@ -68,6 +71,10 @@ export const RETWEET_REQUEST = 'RETWEET_REQUEST';
 export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
 export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
+export const UPDATE_POST_REQUEST = 'UPDATE_POST_REQUEST';
+export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
+export const UPDATE_POST_FAILURE = 'UPDATE_POST_FAILURE';
+
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 
@@ -86,6 +93,20 @@ const reducer = (state = initialState, action) => {
         switch(action.type) {
             case REMOVE_IMAGE:
                 draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
+                break;
+            case UPDATE_POST_REQUEST:
+                draft.updatePostLoading = true;
+                draft.updatePostDone = false;
+                draft.updatePostError = null;
+                break;
+            case UPDATE_POST_SUCCESS:
+                draft.updatePostLoading = false;
+                draft.updatePostDone = true;
+                draft.mainPosts.find((v) => v.id === action.data.PostId).content = action.data.content;
+                break;
+            case UPDATE_POST_FAILURE:
+                draft.updatePostLoading = false;
+                draft.updatePostError = action.error;
                 break;
             case RETWEET_REQUEST:
                 draft.retweetLoading = true;
@@ -157,8 +178,8 @@ const reducer = (state = initialState, action) => {
             case LOAD_POSTS_SUCCESS:
                 draft.loadPostsLoading = false;
                 draft.loadPostsDone = true;
-                draft.mainPosts = action.data.concat(draft.mainPosts);
-                draft.hasMorePosts = draft.mainPosts.length < 50;
+                draft.mainPosts = draft.mainPosts.concat(action.data);
+                draft.hasMorePosts = draft.mainPosts.length === 10;
                 break;
             case LOAD_POSTS_FAILURE:
                 draft.loadPostsLoading = false;
