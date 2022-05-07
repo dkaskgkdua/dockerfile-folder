@@ -15,7 +15,7 @@ import {
     LOAD_POSTS_SUCCESS,
     REMOVE_POST_FAILURE,
     REMOVE_POST_REQUEST,
-    REMOVE_POST_SUCCESS,
+    REMOVE_POST_SUCCESS, RETWEET_FAILURE, RETWEET_REQUEST, RETWEET_SUCCESS,
     UNLIKE_POST_FAILURE,
     UNLIKE_POST_REQUEST,
     UNLIKE_POST_SUCCESS, UPLOAD_IMAGES_FAILURE,
@@ -34,22 +34,23 @@ export default function* postSaga() {
         fork(watchAddComment),
         fork(watchLoadPosts),
         fork(watchUploadImages),
+        fork(watchRetweet),
     ])
 }
 // 요청보내는 것을 2초내에한번만 가능하게
 function* watchLoadPosts() {
     yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
 }
+function* watchRetweet() {
+    yield takeLatest(RETWEET_REQUEST, retweet);
+}
 function* watchAddPost() {
-    // yield throttle(ADD_POST_REQUEST, addPost, 2000);
     yield takeLatest(ADD_POST_REQUEST, addPost);
 }
 function* watchUploadImages() {
-    // yield throttle(ADD_POST_REQUEST, addPost, 2000);
     yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
 }
 function* watchRemovePost() {
-    // yield throttle(ADD_POST_REQUEST, addPost, 2000);
     yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 function* watchAddComment() {
@@ -77,7 +78,7 @@ function loadPostsAPI(data) {
     return axios.get("/posts", data);
 }
 function addPostAPI(data) {
-    return axios.post("/post", { content : data});
+    return axios.post("/post", data);
 }
 function removePostAPI(data) {
     return axios.delete(`/post/${data}`);
@@ -85,7 +86,24 @@ function removePostAPI(data) {
 function addCommentAPI(data) {
     return axios.post(`/post/${data.postId}/comment`, data);
 }
+function retweetAPI(data) {
+    return axios.post(`/post/${data}/retweet`);
+}
 
+function* retweet(action) {
+    try {
+        const result = yield call(retweetAPI, action.data);
+        yield put({
+            type: RETWEET_SUCCESS,
+            data: result.data,
+        });
+    } catch(err) {
+        yield put({
+            type: RETWEET_FAILURE,
+            error: err.response.data
+        })
+    }
+}
 function* uploadImages(action) {
     try {
         const result = yield call(uploadImagesAPI, action.data);
@@ -96,7 +114,7 @@ function* uploadImages(action) {
     } catch(err) {
         yield put({
             type: UPLOAD_IMAGES_FAILURE,
-            data: err.response.data
+            error: err.response.data
         })
     }
 }
@@ -111,7 +129,7 @@ function* loadPosts(action) {
     } catch(err) {
         yield put({
             type: LOAD_POSTS_FAILURE,
-            data: err.response.data
+            error: err.response.data
         })
     }
 }
@@ -129,7 +147,7 @@ function* addPost(action) {
     } catch(err) {
         yield put({
             type: ADD_POST_FAILURE,
-            data: err.response.data
+            error: err.response.data
         })
     }
 }
@@ -148,7 +166,7 @@ function* removePost(action) {
     } catch(err) {
         yield put({
             type: REMOVE_POST_FAILURE,
-            data: err.response.data
+            error: err.response.data
         })
     }
 }
@@ -167,7 +185,7 @@ function* addComment(action) {
         console.error(err);
         yield put({
             type: ADD_COMMENT_FAILURE,
-            data: err.response.data
+            error: err.response.data
         })
     }
 }
@@ -184,7 +202,7 @@ function* likePost(action) {
         console.error(err);
         yield put({
             type: LIKE_POST_FAILURE,
-            data: err.response.data
+            error: err.response.data
         })
     }
 }
@@ -201,7 +219,7 @@ function* unlikePost(action) {
         console.error(err);
         yield put({
             type: UNLIKE_POST_FAILURE,
-            data: err.response.data
+            error: err.response.data
         })
     }
 }

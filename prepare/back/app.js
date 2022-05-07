@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const path =require("path");
 
 dotenv.config();
 db.sequelize.sync()
@@ -20,6 +21,9 @@ db.sequelize.sync()
     .catch(console.error);
 passportConfig();
 app.use(morgan("dev"));
+
+app.use("/", express.static(path.join(__dirname, "uploads")));
+
 app.use(cors({
     // origin: "https://nodebird.com",
     origin: "http://localhost:3060",

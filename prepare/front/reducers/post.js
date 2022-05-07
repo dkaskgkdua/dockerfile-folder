@@ -31,6 +31,9 @@ export const initialState = {
     uploadImagesLoading: false,
     uploadImagesDone: false,
     uploadImagesError: null,
+    retweetLoading: false,
+    retweetDone: false,
+    retweetError: null,
 }
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
@@ -61,7 +64,11 @@ export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
 export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
 export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
 
+export const RETWEET_REQUEST = 'RETWEET_REQUEST';
+export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
+export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
+export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 
 
@@ -77,7 +84,24 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch(action.type) {
-
+            case REMOVE_IMAGE:
+                draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
+                break;
+            case RETWEET_REQUEST:
+                draft.retweetLoading = true;
+                draft.retweetDone = false;
+                draft.retweetError = null;
+                break;
+            case RETWEET_SUCCESS: {
+                draft.mainPosts.unshift(action.data);
+                draft.retweetLoading = false;
+                draft.retweetDone = true;
+                break;
+            }
+            case RETWEET_FAILURE:
+                draft.retweetLoading = false;
+                draft.retweetError = action.error;
+                break;
             case UPLOAD_IMAGES_REQUEST:
                 draft.loadImagesLoading = true;
                 draft.loadImagesDone = false;
@@ -150,6 +174,7 @@ const reducer = (state = initialState, action) => {
                 draft.mainPosts.unshift(action.data);
                 draft.addPostLoading = false;
                 draft.addPostDone = true;
+                draft.imagePaths = [];
                 break;
             case ADD_POST_FAILURE:
                 draft.addPostLoading = false;
