@@ -39,6 +39,46 @@ router.get("/", async(req, res, next) => {
     }
 
 });
+router.get("/:userId", async(req, res, next) => {
+
+    try {
+
+        const fullUserWithoutPassword = await User.findOne({
+            where: { id: req.params.userId },
+            // attributes: ["id", "nickname", "email"],
+            attributes: {
+                exclude: ["password"],
+            },
+            include: [{
+                model: Post,
+                attributes: ["id"]
+            }, {
+                model: User,
+                as: "Followings",
+                attributes: ["id"]
+            }, {
+                model: User,
+                as: "Followers",
+                attributes: ["id"]
+            }]
+        });
+
+        if(fullUserWithoutPassword) {
+            const data = fullUserWithoutPassword.toJSON();
+            data.Posts = data.Posts.length; // 개인정보 예방
+            data.Followers = data.Followers.length;
+            data.Followings = data.Followings.length;
+            res.status(200).json(data);
+        } else {
+            res.status(404).json("존재하지 않습니다.");
+        }
+
+    } catch( error ) {
+        console.error(error);
+        next(error);
+    }
+
+});
 
 // POST /user/login
 router.post("/login", isNotLoggedIn,  (req, res, next) => {

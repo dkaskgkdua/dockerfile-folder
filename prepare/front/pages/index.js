@@ -48,6 +48,16 @@ const Home = () => {
     );
 };
 
+// 접속할때마다 값이 바뀌지 않고 고정적일때 -> NEXT에서 HTML로 미리 파싱해놓음
+// export const getStaticProps = wrapper.getStaticProps(async(context) => {
+//     context.store.dispatch({
+//         type: LOAD_USER_REQUEST,
+//         data: 1,
+//     });
+//     context.store.dispatch(END);
+//     await context.store.sagaTask.toPromise();
+// })
+// 접속할때마다 값이 가변적일때
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
     const cookie = context.req ? context.req.headers.cookie : '';
     axios.defaults.headers.Cookie = "";
