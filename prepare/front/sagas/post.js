@@ -9,7 +9,7 @@ import {
     ADD_POST_SUCCESS,
     LIKE_POST_FAILURE,
     LIKE_POST_REQUEST,
-    LIKE_POST_SUCCESS,
+    LIKE_POST_SUCCESS, LOAD_POST_FAILURE, LOAD_POST_REQUEST, LOAD_POST_SUCCESS,
     LOAD_POSTS_FAILURE,
     LOAD_POSTS_REQUEST,
     LOAD_POSTS_SUCCESS,
@@ -33,6 +33,7 @@ export default function* postSaga() {
         fork(watchRemovePost),
         fork(watchAddComment),
         fork(watchLoadPosts),
+        fork(watchLoadPost),
         fork(watchUploadImages),
         fork(watchRetweet),
         fork(watchUpdatePost),
@@ -41,6 +42,9 @@ export default function* postSaga() {
 // 요청보내는 것을 2초내에한번만 가능하게
 function* watchLoadPosts() {
     yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
+}
+function* watchLoadPost() {
+    yield takeLatest(LOAD_POST_REQUEST, loadPost);
 }
 function* watchRetweet() {
     yield takeLatest(RETWEET_REQUEST, retweet);
@@ -80,6 +84,9 @@ function unlikePostAPI(data) {
 }
 function loadPostsAPI(lastId) {
     return axios.get(`/posts?lastId=${lastId || 0}&limit=10&offset=10`);
+}
+function loadPostAPI(data) {
+    return axios.get(`/post/${data}`);
 }
 function addPostAPI(data) {
     return axios.post("/post", data);
@@ -151,6 +158,20 @@ function* loadPosts(action) {
     } catch(err) {
         yield put({
             type: LOAD_POSTS_FAILURE,
+            error: err.response.data
+        })
+    }
+}
+function* loadPost(action) {
+    try {
+        const result = yield call(loadPostAPI, action.data);
+        yield put({
+            type: LOAD_POST_SUCCESS,
+            data: result.data,
+        });
+    } catch(err) {
+        yield put({
+            type: LOAD_POST_FAILURE,
             error: err.response.data
         })
     }
