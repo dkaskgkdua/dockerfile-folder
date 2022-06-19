@@ -6,6 +6,7 @@ const cors= require("cors");
 const postRouter = require("./routes/post")
 const postsRouter = require("./routes/posts")
 const userRouter = require("./routes/user")
+const hashtagRouter = require("./routes/hashtag")
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
@@ -51,6 +52,7 @@ app.get("/api", (req, res) => {
 app.use("/post", postRouter);
 app.use("/user", userRouter);
 app.use("/posts", postsRouter);
+app.use("/hashtag", hashtagRouter);
 
 // 에러처리 미들웨어
 // app.use((err, req, res, next) => {

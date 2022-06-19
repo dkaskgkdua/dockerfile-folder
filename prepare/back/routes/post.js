@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path =require("path");
 const fs = require("fs");
-const { Post, Comment, Image, User } = require("../models");
+const { Post, Comment, Image, User, Hashtag  } = require("../models");
 const { isLoggedIn } = require("./middlewares")
 
 try {
@@ -37,11 +37,18 @@ router.get("/", (req, res, next) => {
 });
 router.post("/",  isLoggedIn, upload.none(), async (req, res, next) => {
     try {
+        const hashtags = req.body.content.match(/#[^\s#]+/g);
         // passport에서 구현한 것으로 user에 접근이 가능함
         const post = await Post.create({
             content: req.body.content,
             UserId: req.user.id,
         });
+        if (hashtags) {
+            const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({
+                where: { name: tag.slice(1).toLowerCase() },
+            }))); // [[노드, true], [리액트, true]]
+            await post.addHashtags(result.map((v) => v[0]));
+        }
         if(req.body.image) {
             if(Array.isArray(req.body.image)) { // 이미지 여러개
                 const images = await Promise.all(req.body.image.map((image) => Image.create({ src: image })));
