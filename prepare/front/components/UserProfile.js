@@ -2,6 +2,7 @@ import {Avatar, Button, Card} from "antd";
 import {useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {logoutRequestAction} from "../reducers/user";
+import Link from "next/link";
 
 const UserProfile = () => {
     const dispatch = useDispatch();
@@ -18,7 +19,11 @@ const UserProfile = () => {
             ]}
         >
             <Card.Meta
-                avatar={<Avatar>{me.nickname[0]}</Avatar>}
+                avatar={(
+                    <Link href={`/user/${me.id}`}>
+                        <a><Avatar>{me.nickname[0]}</Avatar></a>
+                    </Link>
+                )}
                 title={me.nickname}
             />
             <Button onClick={onLogOut} loading={logOutLoading}>로그아웃</Button>
