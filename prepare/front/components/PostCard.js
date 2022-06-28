@@ -9,6 +9,9 @@ import {REMOVE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST, RETWEET_REQ
 import FollowButton from "./FollowButton";
 import PostCardContent from "./PostCardContent";
 import Link from "next/link";
+import moment from "moment";
+
+moment.locale("ko");
 
 const PostCard = ({post}) => {
     const dispatch = useDispatch();
@@ -112,6 +115,7 @@ const PostCard = ({post}) => {
                         <Card
                             cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images}/>}
                         >
+                            <div style={{ float: "right"}}>{moment(post.createdAt).format("YYYY.MM.DD")}</div>
                                 <Card.Meta
                                     avatar={(
                                         <Link href={`/user/${post.Retweet.User.id}`}>
